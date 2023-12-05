@@ -1,37 +1,46 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import validate from 'express-validator';
-import { Users } from '#model/Users.js';
+import { validationResult } from 'express-validator';
+import { User } from '#model/User.js';
                                                                                                                                 
 export const joinRouter = express.Router();
 
 joinRouter.post('/admin/join', async(req, res) => {
     const data = req.body;
-    const err = validate(data, {
-        user_id: {
-            required: true,
-        },
-    });
+    let errors;
 
-    if(err.length > 0) {
+    if(data.isAdmin === 'Y'){
+        errors = validationResult(data, [
+            {
+                field: 'user_id',
+                rules: [isRequired(), isUnique(), isLength({ min: 4, max: 10 })]
+            },
+            {
+                field: 'password',
+                rules: [isRequired(), isLength({ min: 6, max: 15 })]
+            },
+            {
+                field: 'name',
+                rules: [isRequired(), isUnique(), isLength({ min: 2, max: 10 })]
+            },
+            {
+                field: 'email',
+                rules: [isRequired(), isUnique(), isEmail(), isLength({ max: 50 })]
+            },
+        ]);
+    }
+
+    console.log(errors);
+
+    if(errors) {
         res.status(400);
     }else{
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        
-        const user = new Users({
-            user_id: data.id,
-            password: hashedPassword,
-            name: data.name,
-            email: data.email,
-            zipcode: "0",
-            address_2: "aa",
-            phone_2: "01011111111",
-            agree_term: 'Y',
-            agree_email: 'Y'
-        });
+        const userInfo = Object.assign({password: hashedPassword}, data);
+
+        const user = new User(userInfo);
     
         const result = await user.save();
         res.status(200).json({ result });
     }
-    
 }); 

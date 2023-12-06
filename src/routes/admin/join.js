@@ -1,46 +1,43 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import { validationResult } from 'express-validator';
+import pkg, { check } from 'express-validator';
+const { validationResult } = pkg;
 import { User } from '#model/User.js';
                                                                                                                                 
-export const joinRouter = express.Router();
+export const adminJoinRouter = express.Router();
 
-joinRouter.post('/admin/join', async(req, res) => {
+const userValidationRules = [
+    check('user_id')
+        .notEmpty().withMessage('아이디를 입력해주세요.')
+        .isLength({ min: 4, max: 10 }).withMessage('아이디는 4~10자 사이로 입력해주세요.'),
+    check('password')
+        .notEmpty().withMessage('비밀번호를 입력해주세요.')
+        .isLength({ min: 6, max: 15 }).withMessage('비밀번호는 6~15자 사이로 입력해주세요.'),
+    check('name')
+        .notEmpty().withMessage('이름을 입력해주세요.')
+        .isLength({ min: 2, max: 10 }).withMessage('비밀번호는 2~10자 사이로 입력해주세요.'),
+    check('email')
+        .notEmpty().withMessage('이메일을 입력해주세요.')
+        .isEmail().withMessage('올바른 이메일 형식을 입력해주세요.')
+]
+
+adminJoinRouter.post('/api/admin/user/join', userValidationRules, async(req, res) => {
     const data = req.body;
-    let errors;
+    const errors = validationResult(req);
 
-    if(data.isAdmin === 'Y'){
-        errors = validationResult(data, [
-            {
-                field: 'user_id',
-                rules: [isRequired(), isUnique(), isLength({ min: 4, max: 10 })]
-            },
-            {
-                field: 'password',
-                rules: [isRequired(), isLength({ min: 6, max: 15 })]
-            },
-            {
-                field: 'name',
-                rules: [isRequired(), isUnique(), isLength({ min: 2, max: 10 })]
-            },
-            {
-                field: 'email',
-                rules: [isRequired(), isUnique(), isEmail(), isLength({ max: 50 })]
-            },
-        ]);
-    }
-
-    console.log(errors);
-
-    if(errors) {
-        res.status(400);
+    if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }else{
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        const userInfo = Object.assign({password: hashedPassword}, data);
-
+        const userInfo = Object.assign({password: hashedPassword, isAdmin: 'Y'}, data);
         const user = new User(userInfo);
     
-        const result = await user.save();
-        res.status(200).json({ result });
+        try {
+            const result = await user.save()
+            return res.status(200).json({ result });
+        } catch (error) {
+            return res.status(200).json({ message: '사용자 저장 중 오류 발생', error: error.message });
+        }
+
     }
 }); 

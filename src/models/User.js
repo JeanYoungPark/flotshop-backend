@@ -31,6 +31,7 @@ export const User = database.define('user', {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     }
 }, {
+    tableName: 'user',
     timestamps: false,
 });
 

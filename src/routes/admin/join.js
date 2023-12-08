@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import pkg, { check } from 'express-validator';
 const { validationResult } = pkg;
-import { User } from '#model/User.js';
+import { User } from '#model/User';
                                                                                                                                 
 export const adminJoinRouter = express.Router();
 

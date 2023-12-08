@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "imports": {
-    "#config/*": "./src/config/*",
-    "#route/*": "./src/routes/*",
-    "#model/*": "./src/models/*",
-    "#core/*": "./*"
+    "#config/*": "./src/config/*.js",
+    "#route/*": "./src/routes/*.js",
+    "#model/*": "./src/models/*.js",
+    "#core/*": "./*.js"
   },
+  "type": "module",
   "scripts": {
     "start": "node app.js",
     "watch": "nodemon app.js",

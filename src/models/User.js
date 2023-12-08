@@ -1,4 +1,4 @@
-import { database } from "#core/db.js"
+import { database } from "#core/db"
 import { Sequelize } from "sequelize";
 
 export const User = database.define('user', {

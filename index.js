@@ -14,7 +14,7 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

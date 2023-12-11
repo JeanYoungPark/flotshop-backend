@@ -1,7 +1,7 @@
 import { database } from "#core/db"
 import { Sequelize } from "sequelize";
 
-export const Session = database.define('session', {
+export const Session = database.define('sessions', {
     id: {
         type: Sequelize.STRING(10),
         primaryKey: true

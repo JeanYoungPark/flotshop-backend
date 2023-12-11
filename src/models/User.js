@@ -1,7 +1,7 @@
 import { database } from "#core/db"
 import { Sequelize } from "sequelize";
 
-export const User = database.define('user', {
+export const User = database.define('users', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -19,7 +19,7 @@ export const User = database.define('user', {
     email: {
         type: Sequelize.STRING(50)
     },
-    isAdmin: {
+    is_admin: {
         type: Sequelize.ENUM('Y', 'N'),
         defaultValue: 'N'
     },
@@ -31,11 +31,10 @@ export const User = database.define('user', {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     }
 }, {
-    tableName: 'user',
     timestamps: false,
 });
 
-export const UserDetail = database.define('user_detail', {
+export const UserDetail = database.define('users_detail', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

@@ -7,12 +7,13 @@ export const updateUser = express.Router();
 
 findUser.post('/api/find/user', async (req, res) => {
     const data = req.body;
-    const user = await User.findOne({ where: data })
-    .catch(error => {
-        return res.status(200).json({ message: '사용자 조회 중 오류 발생', error: error.message });
-    });
 
-    return res.status(200).json({ user });
+    try {
+        const user = await User.findOne({ where: data });
+        return res.status(200).json({ user });
+    } catch (error) {
+        return res.status(500).json({ message: '사용자 조회 중 오류 발생', error: error.message });
+    }
 })
 
 updateUser.post('/api/user/update', async (req, res) => {
@@ -25,7 +26,7 @@ updateUser.post('/api/user/update', async (req, res) => {
             const result = await user.update(data, {where: {id: data.id}});
             return res.status(200).json({ result });
         } catch (error) {
-            return res.status(200).json({ message: '사용자 저장 중 오류 발생', error: error.message });
+            return res.status(500).json({ message: '사용자 저장 중 오류 발생', error: error.message });
         }
     }
 })

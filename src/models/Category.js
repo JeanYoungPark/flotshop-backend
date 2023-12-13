@@ -1,7 +1,8 @@
 import { database } from "#core/db"
 import { Sequelize } from "sequelize";
+import { Product } from "#model/Product";
 
-export const Category = database.define('category', {
+export const Category = database.define('categories', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -15,7 +16,7 @@ export const Category = database.define('category', {
     }
 }, { timestamps: false })
 
-export const CategoryDetail = database.define('category_detail', {
+export const CategoryDetail = database.define('categories_detail', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -28,4 +29,8 @@ export const CategoryDetail = database.define('category_detail', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     }
-}, { timestamps: false })
+}, { timestamps: false, freezeTableName: true })
+
+// Category.hasMany(CategoryDetail, {as: 'children'});
+// CategoryDetail.belongsTo(Category, {foreignKey: 'category_id'});
+// CategoryDetail.hadMany(Product, {as: 'children'});

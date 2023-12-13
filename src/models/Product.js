@@ -1,5 +1,6 @@
 import { database } from "#core/db"
 import { Sequelize } from "sequelize";
+import { CategoryDetail } from "#model/Category";
 
 export const Product = database.define('products', {
     id: {
@@ -7,8 +8,8 @@ export const Product = database.define('products', {
         primaryKey: true,
         autoIncrement: true
     },
-    category: {
-        type: Sequelize.STRING(10)
+    category_id: {
+        type: Sequelize.INTEGER
     },
     name: {
         type: Sequelize.STRING(10)
@@ -40,3 +41,5 @@ export const Product = database.define('products', {
 }, {
     timestamps: false,
 });
+
+// Product.belongsTo(CategoryDetail, {foreignKey: 'category_id'});

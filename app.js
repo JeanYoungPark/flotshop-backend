@@ -9,28 +9,29 @@ import { categoryDetail, category } from '#route/category';
 import { categoryAdd } from '#route/category';
 import { categoryDelete } from '#route/category';
 import { categoryDetailAdd } from '#route/category';
+import { categoryDetailDelete } from '#route/category';
+import { categoryInfo } from '#route/category';
+import { adminProductImgUpload } from '#route/admin/product';
 
-/**
- * client, admin common
- */
+// auth
+app.use(adminJoin);
 app.use(findUser);
 app.use(updateUser);
 app.use(login);
 
-/**
- * client
- */
 // category
 app.use(category);
-app.use(categoryDetail);
 app.use(categoryAdd);
-app.use(categoryDetailAdd);
 app.use(categoryDelete);
+app.use(categoryInfo);
+app.use(categoryDetail);
+app.use(categoryDetailAdd);
+app.use(categoryDetailDelete);
 
-/**
- * admin
- */
-app.use(adminJoin);
+// user
 app.use(adminUserList);
+
+//product
 app.use(adminProductList);
 app.use(adminProductAdd);
+app.use(adminProductImgUpload);

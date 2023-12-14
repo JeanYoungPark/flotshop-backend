@@ -22,7 +22,9 @@ export const CategoryDetail = database.define('categories_detail', {
         primaryKey: true,
         autoIncrement: true
     },
-    category_id: { type: Sequelize.INTEGER },
+    category_id: {
+        type: Sequelize.INTEGER,
+    },
     title: { type: Sequelize.STRING(20) },
     reg_date: { type: Sequelize.DATE },
     upd_date: {
@@ -31,6 +33,5 @@ export const CategoryDetail = database.define('categories_detail', {
     }
 }, { timestamps: false, freezeTableName: true })
 
-// Category.hasMany(CategoryDetail, {as: 'children'});
-// CategoryDetail.belongsTo(Category, {foreignKey: 'category_id'});
-// CategoryDetail.hadMany(Product, {as: 'children'});
+Category.hasMany(CategoryDetail, {as: 'children', foreignKey: 'category_id'});
+CategoryDetail.belongsTo(Category, {foreignKey: 'category_id'});

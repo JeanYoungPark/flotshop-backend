@@ -3,6 +3,7 @@ import { Product } from '#model/Product';
 
 export const adminProductList = express.Router();
 export const adminProductAdd = express.Router();
+export const adminProductImgUpload = express.Router();
 
 /**
  * 상품 리스트 (카테고리별)
@@ -23,4 +24,12 @@ adminProductList.post('/api/admin/product/list', async(req, res) => {
  */
 adminProductAdd.post('/api/admin/product/add', async(req, res) => {
     const data = req.body;
+})
+
+/**
+ * 상품 이미지 추가
+ */
+adminProductImgUpload.post('/api/admin/product/upload', (req, res) => {
+    const files = req.files;
+    console.log(files);
 })

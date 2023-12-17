@@ -29,7 +29,7 @@ adminJoin.post('/api/admin/user/join', userValidationRules, async(req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }else{
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        const userInfo = Object.assign({password: hashedPassword, is_admin: 'Y'}, data);
+        const userInfo = Object.assign(data, {password: hashedPassword, is_admin: 'Y'});
         const user = new User(userInfo);
     
         try {

@@ -1,5 +1,6 @@
 import { database } from "#core/db"
 import { Sequelize } from "sequelize";
+import { Session } from "#model/Session";
 
 export const User = database.define('users', {
     id: {
@@ -33,6 +34,11 @@ export const User = database.define('users', {
 }, {
     timestamps: false,
 });
+
+User.association = models => {
+    User.hasMany(models.UserDetail, { foreignKey: 'id', sourceKey: 'id'})
+    User.hasOne(models.Session, {foreignKey: 'id', sourceKey: 'id'})
+}
 
 export const UserDetail = database.define('users_detail', {
     id: {
@@ -103,3 +109,7 @@ export const UserDetail = database.define('users_detail', {
   }, {
     timestamps: false,
 });
+
+UserDetail.association = models => {
+    UserDetail.belongsTo(models.User, {foreignKey: 'id', sourceKey: 'id'})
+}

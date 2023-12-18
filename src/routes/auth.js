@@ -1,15 +1,15 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
+import moment from 'moment-timezone';
 import { User } from '#model/User';
 import { Session } from '#model/Session';
-import moment from 'moment';
 
 export const login = express.Router();
-
+export const logout = express.Router();
 
 login.post('/api/login', async(req, res) => {
     const data = req.body;
+
     try {
         const user = await User.findOne({ where: { user_id: data.user_id } });
         
@@ -20,35 +20,35 @@ login.post('/api/login', async(req, res) => {
             if(isMatch){
                 try {
                     const userId = parseInt(user.id);
+                    
                     // 기존에 세션 테이블에 존재하는지 확인
-                    const sessionHistory = await Session.findOne({where: { id: userId}});
-                    console.log(sessionHistory)
-                    console.log(11121)
+                    const sessionHistory = await Session.findOne({ where: { id: userId } });
+                    // const date = moment().locale('ko-kr').format();
+                    // const expiredDate = moment().add(1, "day").format();
                     const date = new Date();
-                    const expiredDate = moment(date).add(1, "day").toDate();
-        
+                    date.setHours(date.getHours() + 9);
+
+                    const expiredDate = new Date();
+                    expiredDate.setHours(expiredDate.getHours() + 9);
+                    expiredDate.setDate(expiredDate.getDate() + 1);
+                    
                     const userInfo = {
                         userId : user.user_id,
                         isAdmin : user.is_admin,
                         expirationDate: expiredDate
                     }
         
-                    const hashedUser = bcrypt.hash(userInfo, 10);
-        
+                    const hashedUser = await bcrypt.hash(JSON.stringify(userInfo), 10);
+                    
                     if(sessionHistory){
-        
                         // 세션이 있는 경우 업데이트
-                        const data = {
-                            session_id: hashedUser,
-                            expired_at: expiredDate
-                        }
-        
-                        sessionHistory.set(data);
-                        
+                        sessionHistory.session_id = hashedUser;
+                        sessionHistory.expired_at = expiredDate;
+                        sessionHistory.updated_at = date;
+
                         try {
-                            const result = await user.update();
-                            console.log(result)
-                            return res.status(200).json({ result });
+                            const result = await sessionHistory.save();
+                            return res.status(200).json({ result, user: user });
                         } catch (error) {
                             return res.status(200).json({ message: '세션 저장 중 오류 발생', error: error.message });
                         }
@@ -64,13 +64,14 @@ login.post('/api/login', async(req, res) => {
                         
                         try {
                             const result = await session.save();
+                            console.log(result);
                             return res.status(200).json({ result });
                         } catch (error) {
                             return res.status(200).json({ message: '세션 저장 중 오류 발생', error: error.message });
                         }
                     }
                 } catch (error) {
-                    return res.status(500);
+                    return res.status(500).json({error: error.message});
                 }
     
             }else{
@@ -84,4 +85,18 @@ login.post('/api/login', async(req, res) => {
         return res.status(500);
     }
 
+})
+
+logout.post('/api/logout', async(req, res) => {
+    const data = req.body;
+    
+    const date = new Date();
+    date.setHours(date.getHours() + 9);
+
+    try {
+        const newSession = await Session.update({expired_at: date, updated_at: date}, {where: { id: data.id }});
+        return res.status(200).json({success: newSession});
+    } catch (error) {
+        return res.status(200).json({ message: '세션 변경 중 오류 발생', error: error.message });
+    }
 })

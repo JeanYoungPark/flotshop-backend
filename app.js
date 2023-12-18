@@ -1,6 +1,6 @@
 import { app } from '#core/index';
 import { findUser,updateUser } from '#route/user'
-import { login } from '#route/login';
+import { login } from '#route/auth';
 import { adminJoin } from '#route/admin/join';
 import { adminUserList } from '#route/admin/list';
 import { adminProductList } from '#route/admin/product';
@@ -12,12 +12,14 @@ import { categoryDetailAdd } from '#route/category';
 import { categoryDetailDelete } from '#route/category';
 import { categoryInfo } from '#route/category';
 import { adminProductImgUpload } from '#route/admin/product';
+import { logout } from '#route/auth';
 
 // auth
 app.use(adminJoin);
 app.use(findUser);
 app.use(updateUser);
 app.use(login);
+app.use(logout)
 
 // category
 app.use(category);

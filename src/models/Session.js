@@ -23,3 +23,7 @@ export const Session = database.define('sessions', {
 },{
     timestamps: false,
 } );
+
+Session.associate = models => {
+    Session.belongsTo(models.User, {foreignKey: 'id', targetKey: 'id'})
+}

@@ -23,8 +23,6 @@ login.post('/api/login', async(req, res) => {
                     
                     // 기존에 세션 테이블에 존재하는지 확인
                     const sessionHistory = await Session.findOne({ where: { id: userId } });
-                    // const date = moment().locale('ko-kr').format();
-                    // const expiredDate = moment().add(1, "day").format();
                     const date = new Date();
                     date.setHours(date.getHours() + 9);
 
@@ -48,9 +46,9 @@ login.post('/api/login', async(req, res) => {
 
                         try {
                             const result = await sessionHistory.save();
-                            return res.status(200).json({ result, user: user });
+                            return res.status(200).json({ restult: true, result, user: user });
                         } catch (error) {
-                            return res.status(200).json({ message: '세션 저장 중 오류 발생', error: error.message });
+                            return res.status(200).json({ restult: false, message: '세션 저장 중 오류 발생', error: error.message });
                         }
                     }else{
                         const data = {
@@ -64,22 +62,21 @@ login.post('/api/login', async(req, res) => {
                         
                         try {
                             const result = await session.save();
-                            console.log(result);
-                            return res.status(200).json({ result });
+                            return res.status(200).json({ restult: true, result });
                         } catch (error) {
-                            return res.status(200).json({ message: '세션 저장 중 오류 발생', error: error.message });
+                            return res.status(200).json({ restult: false, message: '세션 저장 중 오류 발생', error: error.message });
                         }
                     }
                 } catch (error) {
-                    return res.status(500).json({error: error.message});
+                    return res.status(500).json({restult: false, error: error.message});
                 }
     
             }else{
-                return res.status(200).json({message: '비밀번호를 다시 입력해주세요.'})
+                return res.status(200).json({restult: false, message: '비밀번호를 다시 입력해주세요.'})
             }
                 
         }else{
-            return res.status(200).json({message: '아이디를 다시 입력해주세요.'})
+            return res.status(200).json({restult: false, message: '아이디를 다시 입력해주세요.'})
         }
     } catch (error) {
         return res.status(500);

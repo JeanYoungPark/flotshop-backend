@@ -13,11 +13,13 @@ import { categoryDetailDelete } from '#route/category';
 import { categoryInfo } from '#route/category';
 import { adminProductImgUpload } from '#route/admin/product';
 import { logout } from '#route/auth';
+import { deleteUser } from '#route/user';
 
 // auth
 app.use(adminJoin);
 app.use(findUser);
 app.use(updateUser);
+app.use(deleteUser)
 app.use(login);
 app.use(logout)
 

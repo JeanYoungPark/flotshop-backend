@@ -4,7 +4,7 @@ import pkg, { check } from 'express-validator';
 const { validationResult } = pkg;
 import { User } from '#model/User';
                                                                                                                                 
-export const adminJoin = express.Router();
+export const adminAuthRouter = express.Router();
 
 const userValidationRules = [
     check('user_id')
@@ -21,7 +21,7 @@ const userValidationRules = [
         .isEmail().withMessage('올바른 이메일 형식을 입력해주세요.')
 ]
 
-adminJoin.post('/api/admin/user/join', userValidationRules, async(req, res) => {
+adminAuthRouter.post('/user/join', userValidationRules, async(req, res) => {
     const data = req.body;
     const errors = validationResult(req);
 

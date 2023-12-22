@@ -3,18 +3,11 @@ import pkg, { check } from 'express-validator';
 const { validationResult } = pkg;
 import { Category, CategoryDetail } from "#model/Category";
 
-export const category = express.Router();
-export const categoryDetail = express.Router();
-export const categoryAdd = express.Router();
-export const categoryInfo = express.Router();
-export const categoryDelete = express.Router();
-export const categoryDetailAdd = express.Router();
-export const categoryDetailDelete= express.Router();
-
+export const categoryRouter = express.Router();
 /**
  * 카테고리 리스트
 */
-category.post('/api/category', async(req, res) => {
+categoryRouter.post('/category', async(req, res) => {
     try {
         const category = await Category.findAll();
         return res.status(200).json({ category });
@@ -32,7 +25,7 @@ const cateValidationRules = [
     .notEmpty().withMessage('카테고리를 입력해주세요.')
 ]
 
-categoryAdd.post('/api/category/add', cateValidationRules, async(req, res) => {
+categoryRouter.post('/category/add', cateValidationRules, async(req, res) => {
     const errors = validationResult(req);
     const data = req.body;
     const category = new Category({title: data.title});
@@ -52,7 +45,7 @@ categoryAdd.post('/api/category/add', cateValidationRules, async(req, res) => {
 /**
  * 카테고리 삭제
  */
-categoryDelete.delete('/api/category/:id', async(req, res) => {
+categoryRouter.delete('/category/:id', async(req, res) => {
     const categoryId = req.params.id;
     
     try {
@@ -66,7 +59,7 @@ categoryDelete.delete('/api/category/:id', async(req, res) => {
 /**
  * 카테고리 정보
  */
-categoryInfo.post('/api/category/info/:id', async(req, res) => {
+categoryRouter.post('/category/info/:id', async(req, res) => {
     const categoryId = req.params.id;
     console.log(categoryId);
     try {
@@ -81,7 +74,7 @@ categoryInfo.post('/api/category/info/:id', async(req, res) => {
 /**
  * 서브 카테고리 리스트
  */
-categoryDetail.post('/api/category/:id/detail', async(req, res) => {
+categoryRouter.post('/category/:id/detail', async(req, res) => {
     const categoryId = parseInt(req.params.id);
     
     try {
@@ -100,7 +93,7 @@ const cateDetailValidationRules = [
         .notEmpty().withMessage('서브 카테고리를 입력해주세요.')
 ]
 
-categoryDetailAdd.post('/api/category/:id/detail/add', cateDetailValidationRules, async(req, res) => {
+categoryRouter.post('/category/:id/detail/add', cateDetailValidationRules, async(req, res) => {
     const errors = validationResult(req);
     const categoryId = req.params.id;
     const data = req.body;
@@ -122,7 +115,7 @@ categoryDetailAdd.post('/api/category/:id/detail/add', cateDetailValidationRules
 /**
  * 서브 카테고리 삭제
  */
-categoryDetailDelete.delete('/api/category/detail/:id', async(req, res) => {
+categoryRouter.delete('/category/detail/:id', async(req, res) => {
     const categoryId = req.params.id;
 
     try {

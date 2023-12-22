@@ -1,13 +1,11 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import moment from 'moment-timezone';
 import { User } from '#model/User';
 import { Session } from '#model/Session';
 
-export const login = express.Router();
-export const logout = express.Router();
+export const authRouter = express.Router();
 
-login.post('/api/login', async(req, res) => {
+authRouter.post('/login', async(req, res) => {
     const data = req.body;
 
     try {
@@ -84,7 +82,7 @@ login.post('/api/login', async(req, res) => {
 
 })
 
-logout.post('/api/logout', async(req, res) => {
+authRouter.post('/logout', async(req, res) => {
     const data = req.body;
     
     const date = new Date();

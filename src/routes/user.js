@@ -2,11 +2,9 @@ import express from 'express';
 import { User } from '#model/User';
 import bcrypt from 'bcrypt';
 
-export const findUser = express.Router();
-export const updateUser = express.Router();
-export const deleteUser = express.Router();
+export const userRouter = express.Router();
 
-findUser.post('/api/find/user', async (req, res) => {
+userRouter.post('/find/user', async (req, res) => {
     const data = req.body;
 
     try {
@@ -17,7 +15,7 @@ findUser.post('/api/find/user', async (req, res) => {
     }
 })
 
-updateUser.post('/api/user/update', async (req, res) => {
+userRouter.post('/user/update', async (req, res) => {
     const data = req.body;
     const user = await User.findOne({ where: { id: data.id} });
     const isMatch = bcrypt.compare(user.password, data.password);
@@ -32,7 +30,7 @@ updateUser.post('/api/user/update', async (req, res) => {
     }
 })
 
-deleteUser.delete('/api/user/delete', async (req, res) => {
+userRouter.delete('/user/delete', async (req, res) => {
     const data = req.body;
     const user = await User.findOne({ where: { id: data.id} });
     

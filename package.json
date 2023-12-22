@@ -32,5 +32,9 @@
     "mysql2": "^3.6.5",
     "nodemon": "^3.0.2",
     "sequelize": "^6.35.1"
+  },
+  "devDependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }

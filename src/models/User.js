@@ -1,4 +1,4 @@
-import { database } from "#core/db"
+import { database } from "#root/db"
 import { Sequelize } from "sequelize";
 import { Session } from "#model/Session";
 

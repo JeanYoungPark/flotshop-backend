@@ -7,7 +7,7 @@
     "#config/*": "./src/config/*.js",
     "#route/*": "./src/routes/*.js",
     "#model/*": "./src/models/*.js",
-    "#core/*": "./*.js"
+    "#root/*": "./*.js"
   },
   "type": "module",
   "scripts": {

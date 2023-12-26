@@ -1,7 +1,6 @@
 import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
+import swaggereJsdoc from "swagger-jsdoc";
 
-console.log(111111);
 const options = {
   swaggerDefinition: {
     openapi: "3.0.0",
@@ -13,12 +12,13 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000", // 요청 URL
+        url: "http://localhost:3001", // 요청 URL
       },
     ],
   },
   apis: ["./routes/*.js", "./routes/admin/*.js"], //Swagger 파일 연동
 }
-export const specs = swaggerJsdoc(options)
 
-// module.exports = { swaggerUi, specs }
+const specs = swaggereJsdoc(options);
+
+export { specs, swaggerUi };

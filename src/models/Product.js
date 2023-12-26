@@ -42,4 +42,38 @@ export const Product = database.define('products', {
     timestamps: false,
 });
 
-// Product.belongsTo(CategoryDetail, {foreignKey: 'category_id'});
+export const ProductImg = database.define('products_img', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    product_id: {
+        type: Sequelize.INTEGER,
+    },
+    img_name: {
+        type: Sequelize.STRING
+    },
+    img_data: {
+        type: Sequelize.STRING
+    },
+    img_size: {
+        type: Sequelize.NUMBER(10),
+    },
+    img_format: {
+        type: Sequelize.STRING
+    },
+    reg_date: {
+        type: Sequelize.DATE,
+    },
+    upd_date: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+    }
+}, {
+    freezeTableName: true,
+    timestamps: false,
+})
+
+Product.hasMany(ProductImg, {as: 'children', foreignKey: 'product_id'});
+ProductImg.belongsTo(Product, {foreignKey: 'product_id'})

@@ -6,7 +6,7 @@ import { adminProductRouter } from '#route/admin/product';;
 import { authRouter } from '#route/auth';
 import { categoryRouter } from '#route/category';
 import { userRouter } from '#route/user';
-import { specs, swaggerUi } from '#root/swagger/swagger';
+import { specs, swaggerUi } from './src/swagger/swagger.js';
 
 const api = express.Router();
 const admin = express.Router();

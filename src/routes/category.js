@@ -61,7 +61,7 @@ categoryRouter.delete('/category/:id', async(req, res) => {
  */
 categoryRouter.post('/category/info/:id', async(req, res) => {
     const categoryId = req.params.id;
-    console.log(categoryId);
+    
     try {
         const category = await Category.findOne({where : {id: categoryId}});
         

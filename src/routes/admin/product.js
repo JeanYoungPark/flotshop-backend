@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import crypto from "crypto";
 import { Product, ProductImg } from '#model/Product';
 
 const dirname = process.cwd();
@@ -33,7 +34,7 @@ const storage = multer.diskStorage({
         cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname + '-' + Date.now())
+        cb(null, file.originalname)
     },
 });
   
@@ -49,9 +50,10 @@ adminProductRouter.post('/product/upload', upload.array('data'), async(req, res)
     for (let i = 0; i < req.files.length; i++) {
         const el = req.files[i];
         const data = {};
-        data.product_id = 5;
+        data.product_id = categoryId;
         data.img_name = el.filename;
-        data.img_data = el.encoding;
+        data.image_hash = crypto.createHash('md5').digest("hex", el.filename);
+        data.img_path = '/src/uploads/products';
         data.img_size = el.size;
         data.img_format = el.mimetype;
 
@@ -59,8 +61,7 @@ adminProductRouter.post('/product/upload', upload.array('data'), async(req, res)
     }
     
     try {
-        const productImg = new ProductImg(datas);
-        const result = await productImg.save();
+        const result = await ProductImg.bulkCreate(datas);
         res.status(200).json({result});
     } catch (err) {
         return res.status(500).json({ message: '이미지 저장 중 오류 발생', error: err.message });

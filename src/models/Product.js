@@ -54,7 +54,10 @@ export const ProductImg = database.define('products_img', {
     img_name: {
         type: Sequelize.STRING
     },
-    img_data: {
+    image_hash: {
+        type: Sequelize.STRING
+    },
+    img_path: {
         type: Sequelize.STRING
     },
     img_size: {

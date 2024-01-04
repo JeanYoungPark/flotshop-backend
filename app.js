@@ -7,7 +7,9 @@ import { authRouter } from '#route/auth';
 import { categoryRouter } from '#route/category';
 import { userRouter } from '#route/user';
 import { specs, swaggerUi } from './src/swagger/swagger.js';
+import { boardRouter } from '#route/board';
 
+const dirname = process.cwd();
 const api = express.Router();
 const admin = express.Router();
 
@@ -16,6 +18,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 api.use(authRouter);
 api.use(categoryRouter);
+api.use(boardRouter)
 api.use(userRouter);
 
 api.use("/admin", admin);

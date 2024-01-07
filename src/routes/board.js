@@ -2,6 +2,7 @@ import express from "express";
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
+import process from "process";
 import { BoardImgTemp } from "#model/Board";
 
 const dirname = process.cwd();
@@ -9,11 +10,11 @@ export const boardRouter = express.Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(dirname, 'src/uploads/boards');
+        const uploadPath = path.join(dirname, 'uploads/boards');
         cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
-        const imageHash = crypto.createHash('md5').update(file.originalname).digest('hex');
+        const imageHash = crypto.createHash('sha256').update(file.originalname + Date.now()).digest('hex');
         const ext = path.extname(file.originalname);
         const uniqueFilename = `${imageHash}${ext}`;
 
@@ -26,13 +27,13 @@ const upload = multer({ storage: storage });
 /**
  * 게시판 이미지 추가
 */
-boardRouter.post('/board/uploadtmp', upload.single('data'), async(req, res) => {
+boardRouter.post('/board/upload/temp', upload.single('data'), async(req, res) => {
     const el = req.file;
     
     const data = {};
     data.img_name = el.originalname;
     data.image_hash = el.filename;
-    data.img_path = '/src/uploads/boards';
+    data.img_path = '/boards';
     data.img_size = el.size;
     data.img_format = el.mimetype;
 

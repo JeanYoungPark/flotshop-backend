@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
         cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
-        const imageHash = crypto.createHash('md5').update(file.originalname).digest('hex');
+        const imageHash = crypto.createHash('sha256').update(file.originalname + Date.now()).digest('hex');
         const ext = path.extname(file.originalname);
         const uniqueFilename = `${imageHash}${ext}`;
 
@@ -57,7 +57,7 @@ adminProductRouter.post('/product/upload', upload.array('data'), async(req, res)
         data.product_id = categoryId;
         data.img_name = el.originalname;
         data.image_hash = el.filename;
-        data.img_path = '/src/uploads/products';
+        data.img_path = '/products';
         data.img_size = el.size;
         data.img_format = el.mimetype;
 

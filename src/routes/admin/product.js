@@ -26,6 +26,15 @@ adminProductRouter.post('/product/list', async(req, res) => {
  */
 adminProductRouter.post('/product/add', async(req, res) => {
     const data = req.body;
+    const product = new Product(data);
+
+    try {
+        const result = await product.save();
+        return res.status(200).json({ result });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: '상품 저장 중 오류 발생', error: err.message });
+    }
 })
 
 const storage = multer.diskStorage({

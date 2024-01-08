@@ -17,7 +17,7 @@ export const Product = database.define('products', {
     price: {
         type: Sequelize.NUMBER(8)
     },
-    option: {
+    option_id: {
         type: Sequelize.INTEGER
     },
     description: {

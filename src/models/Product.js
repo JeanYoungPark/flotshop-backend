@@ -78,5 +78,5 @@ export const ProductImg = database.define('products_img', {
     timestamps: false,
 })
 
-Product.hasMany(ProductImg, {as: 'children', foreignKey: 'product_id'});
-ProductImg.belongsTo(Product, {foreignKey: 'product_id'})
+Product.hasMany(ProductImg, {as: 'productImg', foreignKey: 'id'});
+ProductImg.belongsTo(Product, {foreignKey: 'id'})

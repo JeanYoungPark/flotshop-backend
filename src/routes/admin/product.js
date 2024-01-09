@@ -12,13 +12,17 @@ export const adminProductRouter = express.Router();
  */
 adminProductRouter.post('/product/list', async(req, res) => {
     const data = req.body;
-    console.log(data);
-    // const productList = await Product.findALL({where: {category: data}})
-    // .catch(error => {
-    //     return res.status(200).json({ message: '상품 조회 중 오류 발생', error: error.message });
-    // });
-
-    // return res.status(200).json({productList});
+    
+    try {
+        const productList = await Product.findAll({
+            where: { category_id: data.id },
+            include: [{model: ProductImg, as: 'productImg', limit: 1, attributes: ['img_path','image_hash']}]
+        });
+        
+        return res.status(200).json({productList});
+    } catch (error) {
+        return res.status(200).json({ message: '상품 조회 중 오류 발생', error: error.message });
+    }
 })
 
 /**
@@ -39,7 +43,7 @@ adminProductRouter.post('/product/add', async(req, res) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(dirname, 'src/uploads/products');
+        const uploadPath = path.join(dirname, 'uploads/products');
         cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
